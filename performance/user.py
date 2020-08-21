@@ -49,7 +49,7 @@ class ClientWrapper(object):
     Client created to proxy and modify the requests before they are sent via locust
     Requests will be processed to modify the params from the original har file
     and adjust them to the current session.
-    The real client is the task.locust.client
+    The real client is the task.client
     """
 
     csrf_cookie_name = None
@@ -57,7 +57,7 @@ class ClientWrapper(object):
     def __init__(self, task: SequentialTaskSet):
         self.task = task
         # This is the real client (usually a locust.clients.HttpSession):
-        self.client = task.locust.client
+        self.client = self.task.user.client
         parsed_url = urllib.parse.urlparse(self.client.base_url)
         netloc = parsed_url.hostname
         if parsed_url.port:
@@ -118,7 +118,7 @@ class ClientWrapper(object):
     def process_json(self, payload):
         # use the provided credentials:
         payload_to_replace = {
-            "username": StudioUserBehavior.user,
+            "username": StudioUserBehavior.username,
             "password": StudioUserBehavior.password,
         }
         # facility management:
@@ -167,9 +167,9 @@ class ClientWrapper(object):
 
 
 class StudioUserBehavior(SequentialTaskSet):
-    # user & password temporal, to be read from a file
-    user = "admin"
-    password = "pass"
+    # username & password temporal, to be read from a file
+    username = "a@a.com"
+    password = "a"
     content_cache_key = None
 
     def __init__(self, parent):
