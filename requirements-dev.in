@@ -32,3 +32,4 @@ nodeenv
 pip-tools
 locust
 drf-yasg
+har-transformer
